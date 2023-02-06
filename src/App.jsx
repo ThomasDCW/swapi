@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, NavLink } from 'react-router-dom';
 import Peoples from './components/Peoples';
 import './App.css';
 import Starships from './components/Starships';
@@ -6,12 +6,18 @@ import Starships from './components/Starships';
 export default function App() {
   return (
     <div className='App'>
-      <h1>SWAPI : Stars wars API</h1>
+      <h1>SWAPI : Star wars API</h1>
       <nav>
         <ul>
-          <li>Home</li>
-          <li>Peoples</li>
-          <li>Starships</li>
+          <NavLink to='/'>
+            <li>Home</li>
+          </NavLink>
+          <NavLink to='/peoples'>
+            <li>Peoples</li>
+          </NavLink>
+          <NavLink to='/starships'>
+            <li>Starships</li>
+          </NavLink>
         </ul>
       </nav>
 
