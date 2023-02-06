@@ -1,34 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [peoples, setPeoples] = useState([]);
+  const [nextUrl, setNextUrl] = useState(1);
+
+  useEffect(() => {
+    const fetchPeople = async () => {
+      try {
+        const response = await axios.get(
+          `https://swapi.dev/api/people/?page=${nextUrl}`
+        );
+        setPeoples(response.data.results);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPeople();
+  }, [nextUrl]);
+
+  const nextPage = () => {
+    if (nextUrl >= 1 && nextUrl < 9) {
+      setNextUrl(nextUrl + 1);
+    } else nextUrl;
+  };
+
+  const previousPage = () => {
+    setNextUrl(nextUrl - 1);
+  };
 
   return (
-    <div className="App">
+    <div className='App'>
+      <h1>SWAPI : Stars wars API</h1>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {peoples
+          ? peoples.map((people, key) => {
+              return (
+                <div key={key}>
+                  <h2>{people.name}</h2>
+                </div>
+              );
+            })
+          : 'Loading ...'}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div>page : {nextUrl}/9</div>
+      <div>
+        {nextUrl > 1 ? (
+          <button type='button' onClick={previousPage}>
+            Previous Page
+          </button>
+        ) : null}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>
+        {nextUrl >= 1 ? (
+          <button type='button' onClick={nextPage}>
+            Next Page
+          </button>
+        ) : null}
+      </div>
     </div>
-  )
+  );
 }
-
-export default App
